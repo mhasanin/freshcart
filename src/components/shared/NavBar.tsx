@@ -1,21 +1,20 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import logo from "@/assets/images/mini-logo.png";
 import {
   ChevronDown,
-  Heart,
+  Gift,
   Headset,
+  Heart,
   Mail,
+  Menu,
   Phone,
   Search,
   ShoppingCart,
   Truck,
-  Gift,
   User,
   UserPlus,
-  Menu,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function NavBar() {
   return (

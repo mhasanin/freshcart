@@ -1,17 +1,16 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import logo from "@/assets/images/freshcart-logo.svg"; // استيراد الصورة من المسار الصحيح
+import logo from "@/assets/images/freshcart-logo.svg";
 import { CreditCard } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaYoutube,
-  FaPhoneAlt,
   FaEnvelope,
+  FaFacebookF,
+  FaInstagram,
   FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaTwitter,
+  FaYoutube,
 } from "react-icons/fa";
 
 const Footer = () => {

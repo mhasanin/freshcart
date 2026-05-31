@@ -11,7 +11,7 @@
 ## Dependencies :
 
 [1] Styles : Tailwind CSS
-[2] Icons : Lucide React
+[2] Icons : Lucide React Icons & React Icons
 [3] Fonts : Next Font Optimization
 [4] Working with api : Axios
 [5] Working with Form : React Hook Form
