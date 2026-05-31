@@ -1,7 +1,11 @@
-export default function Login() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1>Login Page</h1>
-    </div>
-  );
+import LoginScreen from "@/features/auth/views/login.screen";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login | FreshCart",
+  description: "Sign in to your FreshCart account",
+};
+
+export default function LoginPage() {
+  return <LoginScreen />;
 }
