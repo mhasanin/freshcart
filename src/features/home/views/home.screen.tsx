@@ -1,4 +1,4 @@
-import Slider from "@/features/home/components/Slider.tsx";
+import Slider from "../components/Slider";
 export default function HomeScreen() {
   return (
     <>
