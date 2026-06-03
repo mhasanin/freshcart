@@ -19,6 +19,7 @@
 [7] Client State Management : Redux
 [8] Server State Management : Tanstack Query
 [9] Toast Notification : react-toastify
+[10] Slider : Swiper
 
 ## Pages
 
