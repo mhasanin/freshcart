@@ -53,10 +53,7 @@ export default function NavBar() {
                   href="tel:+18001234567"
                   className="group flex items-center gap-1.5 hover:text-emerald-600 transition-colors"
                 >
-                  <Phone
-                    className="w-3.5 h-3.5 fill-gray-500 text-gray-500 transition-colors
-                    group-hover:fill-emerald-600 group-hover:text-emerald-600"
-                  />
+                  <Phone className="w-3.5 h-3.5 fill-gray-500 text-gray-500 transition-colors group-hover:fill-emerald-600 group-hover:text-emerald-600" />
                   <span>+1 (800) 123-4567</span>
                 </a>
                 <a
@@ -125,13 +122,14 @@ export default function NavBar() {
       <div className="sticky top-0 z-40 bg-white shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 lg:h-18 gap-4 lg:gap-8">
-            <Link href="/" className="shrink-0 flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2 min-w-fit">
               <Image
                 src={logo}
                 alt="FreshCart"
                 width={40}
                 height={32}
-                style={{ width: "auto" }}
+                className="w-10 h-8"
+                style={{ width: "40px", height: "32px" }}
                 priority
               />
               <span className="text-[#1a2c3d] text-4xl font-bold tracking-tight">
@@ -216,7 +214,6 @@ export default function NavBar() {
                 href="/brands"
                 className="text-gray-700 hover:text-emerald-600 font-semibold transition-colors"
               >
-                
                 Brands
               </Link>
             </nav>
@@ -302,7 +299,7 @@ export default function NavBar() {
                     alt="FreshCart"
                     width={32}
                     height={26}
-                    style={{ width: "auto" }}
+                    style={{ width: "32px", height: "26px" }}
                   />
                   <span className="text-[#1a2c3d] text-2xl font-bold tracking-tight">
                     FreshCart

@@ -53,15 +53,15 @@ const Footer = () => {
           {/* Column 1 */}
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-6">
-              <div className="bg-white  rounded-2xl p-4  shadow-sm">
-                <Image
-                  src={logo}
-                  alt="FreshCart"
-                  width={200}
-                  height={100}
-                  className="object-contain"
-                  priority
-                />
+              <div className="bg-white rounded-2xl p-4 shadow-sm inline-block w-[200px]">
+                <div className="w-full h-auto">
+                  <Image
+                    src={logo}
+                    alt="FreshCart"
+                    className="w-full h-auto object-contain"
+                    priority
+                  />
+                </div>
               </div>
             </Link>
 

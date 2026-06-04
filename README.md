@@ -11,7 +11,7 @@
 ## Dependencies :
 
 [1] Styles : Tailwind CSS
-[2] Icons : Lucide React Icons & React Icons
+[2] Icons : Lucide React Icons & React Icons/fa
 [3] Fonts : Next Font Optimization
 [4] Working with api : Axios
 [5] Working with Form : React Hook Form
@@ -19,7 +19,7 @@
 [7] Client State Management : Redux
 [8] Server State Management : Tanstack Query
 [9] Toast Notification : react-toastify
-[10] Slider : Swiper
+[10] Slider : swiper
 
 ## Pages
 
