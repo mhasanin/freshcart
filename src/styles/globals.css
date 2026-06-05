@@ -35,3 +35,29 @@
 .swiper-button-prev {
   display: none !important;
 }
+.thumbnail-swiper .swiper-slide-thumb-active {
+  transform: scale(1.05);
+}
+
+.thumbnail-swiper .swiper-slide-thumb-active > div {
+  border-color: #059669;
+  box-shadow:
+    0 0 0 1px #059669,
+    0 10px 25px rgba(5, 150, 105, 0.15);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 14px;
+  font-weight: bold;
+  color: #111827;
+}

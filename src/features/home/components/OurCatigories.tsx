@@ -11,12 +11,16 @@ export default async function OurCatigories() {
       <div className="container mx-auto px-4">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-8xl border-l-4 border-green-500 pl-3">
-            Shop By Category
-          </h2>
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-1.5 bg-linear-to-b from-emerald-500 to-emerald-700 rounded-full"></div>
+            <h2 className="text-3xl font-bold text-gray-800">
+              Shop By <span className="text-emerald-600">Category</span>
+            </h2>
+          </div>
+
           <Link
             href="/categories"
-            className="text-green-600 hover:text-green-700 font-medium flex items-center gap-1 transition-colors"
+            className="text-emerald-600 hover:text-emerald-700 font-semibold text-lg flex items-center gap-1 transition-colors pt-1"
           >
             View All Categories <span>→</span>
           </Link>

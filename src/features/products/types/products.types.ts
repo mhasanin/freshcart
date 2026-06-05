@@ -39,3 +39,7 @@ export interface ProductsResponseType {
   results: number;
   data: ProductType[];
 }
+
+export interface SingleProductResponseType {
+  data: ProductType;
+}

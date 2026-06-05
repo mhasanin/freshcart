@@ -3,7 +3,18 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
-    domains: ["ecommerce.routemisr.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ecommerce.routemisr.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "ecommerce.routemisr.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 
