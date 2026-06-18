@@ -41,3 +41,20 @@
 [x] About Page
 [x] Profile Page
 [x] Not Found Page (404 Page)
+
+## To Do List
+
+[ ] Complete Product Details Page
+[ ] Complete Footer
+[ ] Use Image Gallery in Product Details Page
+[ ] Make adding products to cart without login
+[ ] Test new documentation of cart (v2)
+[ ] Make passward bar stregnth dev
+[x] fix add product to cart from product details page
+[ ] complete navbar (username & cart items number)
+[ ] remove search btn from product card
+
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMWFjZjVjZmMzM2Q4MDAxMjExZjZlOCIsIm5hbWUiOiJlZ2UiLCJyb2xlIjoidXNlciIsImlhdCI6MTc4MTExNjcyMiwiZXhwIjoxNzg4ODkyNzIyfQ.9bbeYsWD4NnYu0b3GsxHuGyq-uKlHpig2XQyZrMcZMQ"
+
+samir.en@example.com
+A123456&a

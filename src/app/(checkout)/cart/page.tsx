@@ -1,7 +1,9 @@
+import CartScreen from "@/features/cart/views/cart.screen";
+
 export default function Cart() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1>Cart Page</h1>
-    </div>
+    <>
+      <CartScreen />
+    </>
   );
 }

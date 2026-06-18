@@ -1,7 +1,10 @@
+"use client";
+
 import { Star, StarHalf } from "lucide-react";
 
 interface RatingProps {
   rating: number;
+  size?: number;
 }
 
 export default function Rating({ rating = 0 }: RatingProps) {

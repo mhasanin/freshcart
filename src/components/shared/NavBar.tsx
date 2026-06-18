@@ -27,9 +27,13 @@ import { useState } from "react";
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { logout } = useLogout();
-  const { isAuthenticated } = useSelector(
+  const { isAuthenticated, userInfo } = useSelector(
     (appState: RootStateType) => appState.auth,
   );
+  const { numOfCartItems } = useSelector(
+    (appState: RootStateType) => appState.cart,
+  );
+
   return (
     <header className="bg-white">
       {/* Top Bar - Hidden on mobile */}
@@ -74,12 +78,20 @@ export default function NavBar() {
                     {/* Logged In State */}
                     <div className="flex items-center gap-4">
                       <Link
-                        href="/profile"
-                        className="group flex items-center gap-1.5 text-gray-600 hover:text-emerald-600 transition-colors"
-                      >
-                        <User className="w-3.5 h-3.5 fill-gray-600/10 transition-colors group-hover:text-emerald-600 group-hover:fill-emerald-600/20" />
-                        <span className="font-medium">ege</span>
-                      </Link>
+  href="/profile"
+  className="group flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-gray-50/60 hover:bg-emerald-50/40 text-sm font-exo transition-all duration-300 border border-gray-100/70 hover:border-emerald-100/60"
+>
+  <div className="relative flex items-center justify-center w-5.5 h-5.5 rounded-lg bg-white group-hover:bg-emerald-600 text-gray-500 group-hover:text-white transition-all duration-300 shadow-xs border border-gray-100 group-hover:border-emerald-600">
+    <User className="w-3 h-3 fill-current opacity-90 group-hover:scale-110 transition-transform" />
+  </div>
+
+  <div className="flex items-center gap-1 font-semibold">
+    <span className="text-gray-400 font-medium">Hi,</span>
+    <span className="text-gray-800 group-hover:text-emerald-700 max-w-27.5 truncate relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-emerald-600 group-hover:after:w-full after:transition-all after:duration-300 pb-0.5">
+      {userInfo?.name ? userInfo.name.split(" ")[0] : "Guest"}
+    </span>
+  </div>
+</Link>
 
                       <button
                         onClick={logout}
@@ -248,7 +260,7 @@ export default function NavBar() {
               >
                 <ShoppingCart className="w-5 h-5 fill-gray-500/10" />
                 <span className="absolute -top-0.5 -right-0.5 bg-emerald-600 text-white text-[11px] font-bold rounded-full w-4 h-4 flex items-center justify-center border border-white">
-                  2
+                  {numOfCartItems}
                 </span>
               </Link>
 

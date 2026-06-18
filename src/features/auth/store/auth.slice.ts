@@ -1,14 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 type UserType = {
   id?: string;
   name: string;
   email?: string;
   role: string;
 };
+
 export type AuthStateType = {
   isAuthenticated: boolean;
   userInfo: null | UserType;
 };
+
 const initialState: AuthStateType = {
   isAuthenticated: false,
   userInfo: null,
@@ -24,5 +27,9 @@ const authSlice = createSlice({
     },
   },
 });
+
 export const authReducer = authSlice.reducer;
 export const { setAuthState } = authSlice.actions;
+
+// Export for type inference
+export type AuthReducerType = typeof authReducer;

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 .custom-slider-container .swiper-pagination {
   bottom: 25px !important;
   display: flex !important;

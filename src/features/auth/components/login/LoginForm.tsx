@@ -70,8 +70,6 @@ export default function LoginForm() {
         }),
       );
 
-      // console.log(response.data.token);
-
       toast.success(response.message);
 
       await new Promise((resolve) => setTimeout(resolve, 1500));

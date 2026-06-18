@@ -18,25 +18,28 @@ import "swiper/css/free-mode";
 import { useState } from "react";
 import Image from "next/image";
 import {
-  Star,
-  StarHalf,
   Minus,
   Plus,
   ShoppingCart,
   Bolt,
   Heart,
   Share2,
-  Truck,
   RotateCcw,
-  Shield,
 } from "lucide-react";
 import { ProductType } from "../../types/products.types";
+import Rating from "@/components/ui/Rating";
+import { FaShieldAlt } from "react-icons/fa";
+import { FaTruckFast } from "react-icons/fa6";
+import { addToCartUtil } from "@/features/cart/utils/addToCartUtil";
+import { useAppDispatch } from "@/store/hooks";
+import { setCartInfo } from "@/features/cart/store/cart.slice";
 
 export default function ProductDetailsInfo({
   product,
 }: {
   product: ProductType;
 }) {
+  const dispatch = useAppDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const productImages = [product.imageCover, ...(product.images || [])];
   const [quantity, setQuantity] = useState(product.quantity > 0 ? 1 : 0);
@@ -44,13 +47,25 @@ export default function ProductDetailsInfo({
   const fullStars = Math.floor(product.ratingsAverage || 0);
   const hasHalfStar = (product.ratingsAverage || 0) % 1 >= 0.5;
   const isInStock = product.quantity > 0;
+  const isLowStock = product.quantity > 0 && product.quantity < 10;
 
   const discountPercentage = product.priceAfterDiscount
     ? Math.round(
         ((product.price - product.priceAfterDiscount) / product.price) * 100,
       )
     : 0;
-
+  const [isLoading, setIsLoading] = useState(false);
+  const handleAddToCart = async () => {
+    try {
+      setIsLoading(true);
+      const result = await addToCartUtil(product._id);
+      if (result?.status === "success") {
+        dispatch(setCartInfo(result));
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <section id="product-detail" className="py-6 bg-gray-50/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -154,12 +169,8 @@ export default function ProductDetailsInfo({
               </h1>
 
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center text-yellow-400 gap-0.5">
-                  {[...Array(fullStars)].map((_, index) => (
-                    <Star key={index} size={18} fill="currentColor" />
-                  ))}
-                  {hasHalfStar && <StarHalf size={18} fill="currentColor" />}
-                </div>
+                <Rating rating={product.ratingsAverage} />
+
                 <span className="text-sm text-gray-600 font-medium">
                   {product.ratingsAverage} ({product.ratingsQuantity} reviews)
                 </span>
@@ -186,10 +197,29 @@ export default function ProductDetailsInfo({
               </div>
 
               <div className="flex items-center gap-2 mb-6">
-                <span className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full font-medium bg-green-50 text-green-700">
-                  <span className="w-2 h-2 rounded-full bg-green-500" />
-                  {isInStock ? "In Stock" : "Out Of Stock"}
-                </span>
+                {isInStock ? (
+                  <span
+                    className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full font-medium ${
+                      isLowStock
+                        ? "bg-amber-50 text-amber-700"
+                        : "bg-green-50 text-green-700"
+                    }`}
+                  >
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        isLowStock ? "bg-amber-500" : "bg-green-500"
+                      }`}
+                    />
+                    {isLowStock
+                      ? `Only ${product.quantity} left - Order soon!`
+                      : "In Stock"}
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full font-medium bg-red-50 text-red-700">
+                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                    Out Of Stock
+                  </span>
+                )}
               </div>
 
               <div className="border-t border-gray-100 pt-5 mb-6">
@@ -252,22 +282,26 @@ export default function ProductDetailsInfo({
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-6">
-                <button className="flex-1 bg-emerald-600 text-white py-3.5 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-emerald-700 active:scale-[0.98] transition-all shadow-lg shadow-emerald-600/25">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isLoading}
+                  className="flex-1 cursor-pointer bg-emerald-600 text-white py-3.5 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-emerald-700 active:scale-[0.98] transition-all shadow-lg shadow-emerald-600/25"
+                >
                   <ShoppingCart size={18} />
                   Add to Cart
                 </button>
-                <button className="flex-1 bg-gray-900 text-white py-3.5 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-gray-800 active:scale-[0.98] transition-all">
+                <button className="flex-1 cursor-pointer bg-gray-900 text-white py-3.5 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-gray-800 active:scale-[0.98] transition-all">
                   <Bolt size={18} />
                   Buy Now
                 </button>
               </div>
 
               <div className="flex gap-3 mb-8 border-b border-gray-100 pb-6">
-                <button className="flex-1 border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:border-emerald-300 hover:text-emerald-600 transition">
+                <button className="flex-1 border-2 cursor-pointer border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:border-emerald-300 hover:text-emerald-600 transition">
                   <Heart size={18} />
                   Add to Wishlist
                 </button>
-                <button className="border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:border-emerald-300 hover:text-emerald-600 transition">
+                <button className="border-2 cursor-pointer border-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:border-emerald-300 hover:text-emerald-600 transition">
                   <Share2 size={18} />
                 </button>
               </div>
@@ -275,13 +309,15 @@ export default function ProductDetailsInfo({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="h-10 w-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
-                    <Truck size={20} />
+                    <FaTruckFast size={18} />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 text-sm">
-                      Free Delivery
+                      Fast Delivery
                     </h4>
-                    <p className="text-xs text-gray-500">Orders over 500 EGP</p>
+                    <p className="text-xs text-gray-500">
+                      Free worldwide shipping
+                    </p>
                   </div>
                 </div>
 
@@ -299,10 +335,11 @@ export default function ProductDetailsInfo({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                  <div className="h-10 w-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
-                    <Shield size={18} />
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100/70 text-emerald-600">
+                    <FaShieldAlt size={20} />
                   </div>
+
                   <div>
                     <h4 className="font-semibold text-gray-900 text-sm">
                       Secure Payment

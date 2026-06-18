@@ -1,8 +1,12 @@
 "use client";
 import { Provider } from "react-redux";
-import { ReactNode, use, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { Slide, ToastContainer } from "react-toastify";
-import { AppStoreType, createStore, PreloadedStateType } from "@/store/store";
+import {
+  createStore,
+  type PreloadedStateType,
+  type AppStoreType,
+} from "@/store/store";
 
 type ProvidersProps = {
   children: ReactNode;
@@ -16,6 +20,16 @@ export default function Providers({
   const storeRef = useRef<AppStoreType | null>(null);
   if (!storeRef.current) {
     storeRef.current = createStore(preloadedState);
+  } else {
+    try {
+      const currentState = storeRef.current.getState();
+      const incoming = JSON.stringify(preloadedState || {});
+      const existing = JSON.stringify(currentState || {});
+      if (incoming !== existing) {
+        storeRef.current = createStore(preloadedState);
+      } else {
+      }
+    } catch (e) {}
   }
   return (
     <>

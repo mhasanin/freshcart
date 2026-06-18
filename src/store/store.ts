@@ -1,19 +1,42 @@
-import { authReducer, AuthStateType } from "@/features/auth/store/auth.slice";
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  authReducer,
+  type AuthStateType,
+} from "@/features/auth/store/auth.slice";
+import {
+  cartReducer,
+  type CartStateType,
+} from "@/features/cart/store/cart.slice";
+import {
+  configureStore,
+  type Reducer,
+  type UnknownAction,
+} from "@reduxjs/toolkit";
 
-export type PreloadedStateType = {
+export type RootStateType = {
   auth: AuthStateType;
+  cart: CartStateType;
 };
 
-export function createStore(preloadedState: PreloadedStateType) {
-  const store = configureStore({
+export type PreloadedStateType = Partial<RootStateType>;
+
+export function createStore(preloadedState?: PreloadedStateType) {
+  return configureStore({
     reducer: {
-      auth: authReducer,
+      auth: authReducer as Reducer<
+        AuthStateType,
+        UnknownAction,
+        AuthStateType | undefined
+      >,
+      cart: cartReducer as Reducer<
+        CartStateType,
+        UnknownAction,
+        CartStateType | undefined
+      >,
     },
     preloadedState,
   });
-  return store;
 }
 
 export type AppStoreType = ReturnType<typeof createStore>;
-export type RootStateType = ReturnType<AppStoreType["getState"]>;
+export type RootState = ReturnType<AppStoreType["getState"]>;
+export type AppDispatch = AppStoreType["dispatch"];
