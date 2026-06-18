@@ -11,13 +11,11 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { updateProductQuantity } from "@/features/cart/server/cart.actions";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeFromCartUtil } from "@/features/cart/utils/removeFromCartUtil";
+import { updateCartQuantityUtil } from "@/features/cart/utils/updateCartQuantityUtil";
+import type { CartItem } from "@/features/cart/types/cart.typs";
 import { setCartInfo } from "@/features/cart/store/cart.slice";
-import { useState } from "react";
-// import { useTransition } from "react";
-// import { updateQuantityUtil } from "../utils/updateCartQuantityUtil";
 const ReactSwal = withReactContent(Swal);
 
 export default function CartItemsList() {
@@ -40,7 +38,7 @@ export default function CartItemsList() {
     100,
   );
 
-  const handleRemoveItem = async (item: any) => {
+  const handleRemoveItem = async (item: CartItem) => {
     const productTitle = item.product?.title ?? "this item";
 
     const result = await ReactSwal.fire({
@@ -56,11 +54,7 @@ export default function CartItemsList() {
 
     if (!result.isConfirmed) return;
 
-    const product = item.product;
-    const productIdToDelete =
-      typeof product === "string"
-        ? product
-        : (product._id ?? product.id ?? item._id);
+    const productIdToDelete = item.product._id;
 
     try {
       const response = await removeFromCartUtil(productIdToDelete);
@@ -79,23 +73,16 @@ export default function CartItemsList() {
       });
     }
   };
-  const handleUpdate = async (item: any, newCount: number) => {
+  const handleUpdate = async (item: CartItem, newCount: number) => {
     if (newCount < 1) return;
 
- 
-    const product = item.product;
-    const productIdToUpdate =
-      typeof product === "string"
-        ? product
-        : (product._id ?? product.id ?? item._id);
-        console.log("productIdToUpdate =", productIdToUpdate);
-  console.log("newCount =", newCount);
+    const productIdToUpdate = item.product._id;
 
     try {
-      const response = await updateProductQuantity({
-        productId: productIdToUpdate,
-        quantity: newCount,
-      });
+      const response = await updateCartQuantityUtil(
+        productIdToUpdate,
+        newCount,
+      );
       if (response?.status === "success") {
         dispatch(setCartInfo(response));
       }
@@ -194,18 +181,7 @@ export default function CartItemsList() {
                             <span className="text-xs text-gray-400">•</span>
 
                             <span className="text-xs text-gray-500">
-                              SKU:{" "}
-                              {(() => {
-                                const prod = item.product as any;
-                                if (!prod) return "N/A";
-                                const id =
-                                  typeof prod === "string"
-                                    ? prod
-                                    : (prod._id ?? prod.id);
-                                return typeof id === "string" && id.length >= 1
-                                  ? id.slice(-6).toUpperCase()
-                                  : "N/A";
-                              })()}
+                              SKU: {item.product._id.slice(-6).toUpperCase()}
                             </span>
                           </div>
                         </div>
@@ -228,7 +204,9 @@ export default function CartItemsList() {
                               <button
                                 className="h-8 w-8 rounded-lg cursor-pointer bg-white shadow-sm flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none transition-all"
                                 aria-label="Decrease quantity"
-                                onClick={() => handleUpdate(item, item.count - 1)}
+                                onClick={() =>
+                                  handleUpdate(item, item.count - 1)
+                                }
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
@@ -240,16 +218,9 @@ export default function CartItemsList() {
                               <button
                                 className="h-8 w-8 rounded-lg cursor-pointer bg-emerald-600 shadow-sm shadow-emerald-600/30 flex items-center justify-center text-white hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                                 aria-label="Increase quantity"
-                               onClick={() => {
-  console.log({
-    cartItemId: item._id,
-    productId: item.product._id,
-    productId2: item.product.id,
-    count: item.count,
-  });
-
-  handleUpdate(item, item.count + 1);
-}}
+                                onClick={() =>
+                                  handleUpdate(item, item.count + 1)
+                                }
                               >
                                 <Plus className="w-3.5 h-3.5" />
                               </button>

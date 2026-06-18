@@ -53,7 +53,7 @@ const Footer = () => {
           {/* Column 1 */}
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-6">
-              <div className="bg-white rounded-2xl p-4 shadow-sm inline-block w-[200px]">
+              <div className="bg-white rounded-2xl p-4 shadow-sm inline-block `w-50`">
                 <div className="w-full h-auto">
                   <Image
                     src={logo}

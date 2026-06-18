@@ -48,7 +48,6 @@ export async function getLoggedUserCart(): Promise<AddProductToCartResponseType>
       },
     };
     const { data } = await Axios.request<AddProductToCartResponseType>(options);
-    console.log(JSON.stringify(data.data.products, null, 2));
     return data;
   } catch (error) {
     throw error;
@@ -89,10 +88,6 @@ export async function updateProductQuantity({
   productId: string;
   quantity: number;
 }): Promise<AddProductToCartResponseType> {
-  console.log({
-    productId,
-    quantity,
-  });
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value || null;
 
@@ -101,16 +96,18 @@ export async function updateProductQuantity({
   }
 
   try {
+    const url = `https://ecommerce.routemisr.com/api/v1/cart/${productId}`;
+    const payload = { count: String(quantity) };
+
     const options: AxiosRequestConfig = {
-      url: `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
+      url,
       method: "PUT",
       headers: {
         token,
       },
-      data: {
-        quantity,
-      },
+      data: payload,
     };
+
     const { data } = await Axios.request<AddProductToCartResponseType>(options);
     return data;
   } catch (error) {
