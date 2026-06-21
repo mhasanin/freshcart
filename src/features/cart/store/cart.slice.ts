@@ -1,5 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { CartDataType, CartItem, AddProductToCartResponseType } from "../types/cart.typs";
+import type {
+  CartDataType,
+  CartItem,
+  AddProductToCartResponseType,
+} from "../types/cart.typs";
+import { clear } from "console";
 
 export interface CartStateType {
   numOfCartItems: number;
@@ -23,7 +28,10 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    setCartInfo: (state, action: PayloadAction<AddProductToCartResponseType>) => {
+    setCartInfo: (
+      state,
+      action: PayloadAction<AddProductToCartResponseType>,
+    ) => {
       state.cartId = action.payload?.cartId ?? null;
       state.numOfCartItems = action.payload?.numOfCartItems ?? 0;
       // Guard against missing or differently-shaped payloads coming from
@@ -31,10 +39,16 @@ const cartSlice = createSlice({
       state.products = action.payload?.data?.products ?? [];
       state.totalCartPrice = action.payload?.data?.totalCartPrice ?? 0;
     },
+    clearCart: (state) => {
+      state.cartId = null;
+      state.numOfCartItems = 0;
+      state.products = [];
+      state.totalCartPrice = 0;
+    },
   },
 });
 
-export const { setCartInfo } = cartSlice.actions;
+export const { setCartInfo, clearCart } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;
 
 export type CartReducerType = typeof cartReducer;

@@ -16,6 +16,7 @@ import { removeFromCartUtil } from "@/features/cart/utils/removeFromCartUtil";
 import { updateCartQuantityUtil } from "@/features/cart/utils/updateCartQuantityUtil";
 import type { CartItem } from "@/features/cart/types/cart.typs";
 import { setCartInfo } from "@/features/cart/store/cart.slice";
+import Link from "next/link";
 const ReactSwal = withReactContent(Swal);
 
 export default function CartItemsList() {
@@ -357,9 +358,12 @@ export default function CartItemsList() {
                 </button>
               </div>
 
-              <button className="w-full bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-700/30 transition-all duration-200 mb-4 flex items-center justify-center gap-2">
+              <Link
+                href="/checkout"
+                className="w-full bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-700/30 transition-all duration-200 mb-4 flex items-center justify-center gap-2"
+              >
                 Secure Checkout
-              </button>
+              </Link>
 
               <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-50 text-center">
                 <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
