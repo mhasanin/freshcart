@@ -1,11 +1,7 @@
 "use client";
 
 import { toast } from "react-toastify";
-import {
-  addProductToCart,
-  getLoggedUserCart,
-  removeProductFromCart,
-} from "../server/cart.actions";
+import { addProductToCart, getLoggedUserCart } from "../server/cart.actions";
 
 export async function addToCartUtil(productId: string) {
   try {
@@ -16,16 +12,10 @@ export async function addToCartUtil(productId: string) {
       toast.success(result.message);
     }
 
-    // After adding product to cart the backend may return a partial/unstable
-    // payload. Fetch the authoritative cart state and return that to ensure
-    // the client store is updated with the same shape as on a full page
-    // refresh (server-side cart fetch).
     try {
       const freshCart = await getLoggedUserCart();
       return freshCart;
     } catch (e) {
-      // If fetching fresh cart fails, still return the original add result
-      // so callers can handle optimistic updates.
       return result;
     }
   } catch (error) {

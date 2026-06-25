@@ -7,6 +7,10 @@ import {
   type CartStateType,
 } from "@/features/cart/store/cart.slice";
 import {
+  wishlistReducer,
+  type WishlistStateType,
+} from "@/features/wishlist/store/wishlist.slice";
+import {
   configureStore,
   type Reducer,
   type UnknownAction,
@@ -15,6 +19,7 @@ import {
 export type RootStateType = {
   auth: AuthStateType;
   cart: CartStateType;
+  wishlist: WishlistStateType;
 };
 
 export type PreloadedStateType = Partial<RootStateType>;
@@ -31,6 +36,11 @@ export function createStore(preloadedState?: PreloadedStateType) {
         CartStateType,
         UnknownAction,
         CartStateType | undefined
+      >,
+      wishlist: wishlistReducer as Reducer<
+        WishlistStateType,
+        UnknownAction,
+        WishlistStateType | undefined
       >,
     },
     preloadedState,

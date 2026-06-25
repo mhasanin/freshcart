@@ -1,10 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
-  CartDataType,
   CartItem,
   AddProductToCartResponseType,
 } from "../types/cart.typs";
-import { clear } from "console";
 
 export interface CartStateType {
   numOfCartItems: number;

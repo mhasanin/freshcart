@@ -10,6 +10,9 @@ import { toast } from "react-toastify";
 import { addToCartUtil } from "@/features/cart/utils/addToCartUtil";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCartInfo } from "@/features/cart/store/cart.slice";
+import { addToWishlistUtil } from "@/features/wishlist/utils/addToWishlistUtil";
+import { removeFromWishlistUtil } from "@/features/wishlist/utils/removeFromWishlistUtil";
+import { setWishlistInfo } from "@/features/wishlist/store/wishlist.slice";
 
 interface ProductCardProps {
   product: ProductType;
@@ -18,6 +21,8 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const { wishlistIds } = useAppSelector((state) => state.wishlist);
+  const [isWishLoading, setIsWishLoading] = useState(false);
 
   const hasDiscount = product.priceAfterDiscount
     ? product.priceAfterDiscount < product.price
@@ -54,8 +59,33 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             className="bg-white h-8 w-8 rounded-full flex items-center justify-center shadow-md text-gray-600 hover:text-red-500 border border-gray-100 transition-colors cursor-pointer"
             title="Add to wishlist"
+            onClick={async () => {
+              if (isWishLoading) return;
+              setIsWishLoading(true);
+              try {
+                const inWishlist = wishlistIds.includes(product._id);
+                if (inWishlist) {
+                  const response = await removeFromWishlistUtil(product._id);
+                  if (response) dispatch(setWishlistInfo(response));
+                } else {
+                  const response = await addToWishlistUtil(product._id);
+                  if (response) dispatch(setWishlistInfo(response));
+                }
+              } catch (e) {
+                // utils show toast on error
+              } finally {
+                setIsWishLoading(false);
+              }
+            }}
           >
-            <Heart size={16} />
+            <Heart
+              size={16}
+              className={
+                wishlistIds.includes(product._id)
+                  ? "text-red-500 fill-red-500"
+                  : ""
+              }
+            />
           </button>
           <button
             className="bg-white h-8 w-8 rounded-full flex items-center justify-center shadow-md text-gray-600 hover:text-emerald-600 border border-gray-100 transition-colors cursor-pointer"

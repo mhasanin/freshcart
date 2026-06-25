@@ -31,8 +31,11 @@ import Rating from "@/components/ui/Rating";
 import { FaShieldAlt } from "react-icons/fa";
 import { FaTruckFast } from "react-icons/fa6";
 import { addToCartUtil } from "@/features/cart/utils/addToCartUtil";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCartInfo } from "@/features/cart/store/cart.slice";
+import { addToWishlistUtil } from "@/features/wishlist/utils/addToWishlistUtil";
+import { removeFromWishlistUtil } from "@/features/wishlist/utils/removeFromWishlistUtil";
+import { setWishlistInfo } from "@/features/wishlist/store/wishlist.slice";
 
 export default function ProductDetailsInfo({
   product,
@@ -40,6 +43,8 @@ export default function ProductDetailsInfo({
   product: ProductType;
 }) {
   const dispatch = useAppDispatch();
+  const { wishlistIds } = useAppSelector((state) => state.wishlist);
+  const [isWishLoading, setIsWishLoading] = useState(false);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const productImages = [product.imageCover, ...(product.images || [])];
   const [quantity, setQuantity] = useState(product.quantity > 0 ? 1 : 0);
@@ -297,8 +302,35 @@ export default function ProductDetailsInfo({
               </div>
 
               <div className="flex gap-3 mb-8 border-b border-gray-100 pb-6">
-                <button className="flex-1 border-2 cursor-pointer border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:border-emerald-300 hover:text-emerald-600 transition">
-                  <Heart size={18} />
+                <button
+                  className="flex-1 border-2 cursor-pointer border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:border-emerald-300 hover:text-emerald-600 transition"
+                  onClick={async () => {
+                    if (isWishLoading) return;
+                    setIsWishLoading(true);
+                    try {
+                      const inWishlist = wishlistIds.includes(product._id);
+                      if (inWishlist) {
+                        const response = await removeFromWishlistUtil(
+                          product._id,
+                        );
+                        if (response) dispatch(setWishlistInfo(response));
+                      } else {
+                        const response = await addToWishlistUtil(product._id);
+                        if (response) dispatch(setWishlistInfo(response));
+                      }
+                    } finally {
+                      setIsWishLoading(false);
+                    }
+                  }}
+                >
+                  <Heart
+                    size={18}
+                    className={
+                      wishlistIds.includes(product._id)
+                        ? "text-red-500 fill-red-500"
+                        : ""
+                    }
+                  />
                   Add to Wishlist
                 </button>
                 <button className="border-2 cursor-pointer border-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:border-emerald-300 hover:text-emerald-600 transition">

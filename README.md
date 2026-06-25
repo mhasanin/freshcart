@@ -46,14 +46,16 @@
 
 [ ] Complete Product Details Page
 [ ] Complete Footer
-[ ] Use Im age Gallery in Product Details Page
+[ ] Use Image Gallery in Product Details Page
 [ ] Make adding products to cart without login
 [ ] Test new documentation of cart (v2)
 [ ] Make passward bar stregnth dev
 [x] fix add product to cart from product details page
 [x] complete navbar (username & cart items number)
-[ ] remove search btn from product card
+[x] remove search btn from product card
 [ ] make disable logic for update buttons @ cartItemsList component
+[ ] make Home page animation
+[ ] operate Clear all items btn in cart page
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMzI2YTI1ZmMzM2Q4MDAxMjFlNDJlNiIsIm5hbWUiOiJNb2hhbWVkIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3ODE3OTc5MjEsImV4cCI6MTc4OTU3MzkyMX0.Sa54DH7VNNouRwzcSHSwds1tsbC0iB7imDYIcwjp9bA
 

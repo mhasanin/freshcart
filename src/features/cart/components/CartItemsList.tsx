@@ -325,18 +325,27 @@ export default function CartItemsList() {
                   </span>
                 </div>
 
-                <div className="flex justify-between text-gray-600 text-sm">
-                  <span>Shipping</span>
-
-                  {isFreeShipping ? (
-                    <span className="font-semibold text-green-600 uppercase text-xs tracking-wider bg-green-50 px-2 py-0.5 rounded-md">
-                      Free
-                    </span>
-                  ) : (
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between text-gray-600 text-sm">
+                    <span>Subtotal</span>
                     <span className="font-semibold text-gray-900">
-                      {shippingCost} EGP
+                      {subtotal} EGP
                     </span>
-                  )}
+                  </div>
+
+                  <div className="flex justify-between text-gray-600 text-sm">
+                    <span>Shipping</span>
+
+                    {isFreeShipping ? (
+                      <span className="font-semibold text-green-600 uppercase text-xs tracking-wider bg-green-50 px-2 py-0.5 rounded-md">
+                        Free
+                      </span>
+                    ) : (
+                      <span className="font-semibold text-gray-900">
+                        {shippingCost} EGP
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="h-px bg-gray-100 my-2"></div>
