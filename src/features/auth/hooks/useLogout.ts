@@ -1,14 +1,15 @@
-import { useDispatch } from "react-redux";
+import type { MouseEventHandler } from "react";
 import { toast } from "react-toastify";
 import { setAuthState } from "../store/auth.slice";
 import { clearToken } from "../server/auth.actions";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/store/hooks";
 
 export default function useLogout() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const logout = async () => {
+  const logout = async (message = "Logged out successfully") => {
     await clearToken();
 
     dispatch(
@@ -17,11 +18,15 @@ export default function useLogout() {
         userInfo: null,
       }),
     );
-    toast.success("Logged out successfully");
-    router.push("/login");
 
+    toast.success(message);
+    router.push("/login");
     router.refresh();
   };
 
-  return { logout };
+  const handleLogout: MouseEventHandler<HTMLButtonElement> = () => {
+    void logout();
+  };
+
+  return { logout, handleLogout };
 }

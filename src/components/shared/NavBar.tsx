@@ -19,20 +19,15 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { RootStateType } from "@/store/store";
+import { useAppSelector } from "@/store/hooks";
 import useLogout from "@/features/auth/hooks/useLogout";
 import { useState } from "react";
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { logout } = useLogout();
-  const { isAuthenticated, userInfo } = useSelector(
-    (appState: RootStateType) => appState.auth,
-  );
-  const { numOfCartItems } = useSelector(
-    (appState: RootStateType) => appState.cart,
-  );
+  const { handleLogout } = useLogout();
+  const { isAuthenticated, userInfo } = useAppSelector((appState) => appState.auth);
+  const { numOfCartItems } = useAppSelector((appState) => appState.cart);
 
   return (
     <header className="bg-white">
@@ -94,7 +89,7 @@ export default function NavBar() {
 </Link>
 
                       <button
-                        onClick={logout}
+                        onClick={handleLogout}
                         className="group flex items-center gap-1.5 text-gray-600 hover:text-red-500 font-medium transition-colors cursor-pointer"
                       >
                         <LogOut className="w-3.5 h-3.5 transition-colors group-hover:text-red-500" />
@@ -431,9 +426,9 @@ export default function NavBar() {
                     <span>Profile</span>
                   </Link>
                   <button
-                    onClick={() => {
+                    onClick={(event) => {
                       setIsMenuOpen(false);
-                      logout();
+                      handleLogout(event);
                     }}
                     className="flex items-center gap-2 py-2.5 px-3 text-left text-gray-600 hover:text-red-500 font-semibold cursor-pointer"
                   >

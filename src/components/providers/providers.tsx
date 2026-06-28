@@ -17,6 +17,7 @@ export default function Providers({
   children,
   preloadedState,
 }: ProvidersProps) {
+  console.log("[HYDRATION] Providers rendering - React is interactive on client");
   const storeRef = useRef<AppStoreType | null>(null);
   if (!storeRef.current) {
     storeRef.current = createStore(preloadedState);

@@ -35,14 +35,20 @@ import { setToken } from "../../server/auth.actions";
 
 import { setAuthState } from "../../store/auth.slice";
 
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/store/hooks";
+
+import { useEffect } from "react";
 
 export default function LoginForm() {
+  console.log("[DEBUG] LoginForm component is rendering on client");
+  console.log("[DEBUG] typeof window:", typeof window, "typeof document:", typeof document);
+  
   const router = useRouter();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<LoginDataType> = async (loginFormData) => {
+    console.log("[DEBUG] onSubmit handler called with data:", loginFormData);
     try {
       const response = await loginActions(loginFormData);
 
@@ -101,6 +107,29 @@ export default function LoginForm() {
 
     mode: "onChange",
   });
+
+  console.log("[DEBUG] useForm initialized - handleSubmit function:", typeof handleSubmit, "isSubmitting:", isSubmitting);
+
+  useEffect(() => {
+    // Test if native event listeners work at all
+    const formElement = document.querySelector('form[data-test-form="login"]');
+    if (formElement) {
+      console.log("[DEBUG] Form element found in DOM");
+      
+      const nativeSubmitHandler = (e: Event) => {
+        console.log("[DEBUG] *** NATIVE addEventListener intercepted form submission ***");
+        e.preventDefault();
+      };
+      
+      formElement.addEventListener("submit", nativeSubmitHandler);
+      
+      return () => {
+        formElement.removeEventListener("submit", nativeSubmitHandler);
+      };
+    } else {
+      console.log("[DEBUG] ❌ Form element NOT found in DOM - this is a big problem!");
+    }
+  }, []);
 
   return (
     <div className="w-full bg-white rounded-2xl shadow-xl p-8 lg:p-12 border border-slate-50">
@@ -162,7 +191,14 @@ export default function LoginForm() {
 
       {/* Form */}
 
-      <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+      <form 
+        data-test-form="login"
+        className="space-y-5" 
+        onSubmit={(e) => {
+          console.log("[DEBUG] Form onSubmit event fired from React event handler");
+          handleSubmit(onSubmit)(e);
+        }}
+      >
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Email Address
@@ -241,6 +277,7 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting}
+          onClick={(e) => console.log("[DEBUG] Button onClick fired - event:", e.type)}
           className="w-full bg-emerald-600 text-white py-3.5 px-4 rounded-xl hover:bg-emerald-700 disabled:bg-emerald-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold text-lg shadow-lg shadow-emerald-100 flex items-center justify-center gap-2"
         >
           {isSubmitting ? (

@@ -8,8 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Providers from "@/components/providers/providers";
 import { varifyToken } from "@/features/auth/server/auth.actions";
 import type { CartStateType } from "@/features/cart/store/cart.slice";
-import { fa, tr } from "zod/v4/locales";
 import { getLoggedUserCart } from "@/features/cart/server/cart.actions";
+import { getAddressesAction } from "@/features/profile/addresses/server/addresses.actions";
+import type { AddressesStateType } from "@/features/profile/addresses/store/addresses.slice";
 
 const exo = Exo({
   subsets: ["latin"],
@@ -17,7 +18,8 @@ const exo = Exo({
   display: "swap",
   variable: "--font-exo",
 });
-let defaltCartState: CartStateType = {
+
+let defaultCartState: CartStateType = {
   numOfCartItems: 0,
   cartId: null,
   products: [],
@@ -25,13 +27,22 @@ let defaltCartState: CartStateType = {
   isLoading: false,
   error: null,
 };
+
+let defaultAddressesState: AddressesStateType = {
+  items: [],
+  isLoading: false,
+  error: null,
+};
+
 export default async function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
   const tokenVarificationResult = await varifyToken();
-  let cartState = defaltCartState;
+  let cartState = defaultCartState;
+  let addressesState = defaultAddressesState;
+
   if (tokenVarificationResult.isAuthenticated) {
     try {
       const cartData = await getLoggedUserCart();
@@ -45,15 +56,38 @@ export default async function RootLayout({
       };
     } catch (error) {
       console.error("Error fetching cart in Layout:", error);
-      cartState = defaltCartState;
+      cartState = defaultCartState;
+    }
+
+    try {
+      const addressesData = await getAddressesAction();
+      if (addressesData.success && addressesData.data) {
+        addressesState = {
+          items: addressesData.data,
+          isLoading: false,
+          error: null,
+        };
+      } else {
+        addressesState = {
+          items: [],
+          isLoading: false,
+          error: addressesData.message || "Failed to load addresses",
+        };
+      }
+    } catch (error) {
+      console.error("Error fetching addresses in Layout:", error);
+      addressesState = {
+        items: [],
+        isLoading: false,
+        error: "Something went wrong while fetching addresses.",
+      };
     }
   }
-
-  // Initialize cart with default state
 
   const preloadedState = {
     auth: tokenVarificationResult,
     cart: cartState,
+    addresses: addressesState,
   };
 
   return (

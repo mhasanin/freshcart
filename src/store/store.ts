@@ -11,15 +11,24 @@ import {
   type WishlistStateType,
 } from "@/features/wishlist/store/wishlist.slice";
 import {
+  addressesReducer,
+  AddressesStateType,
+} from "@/features/profile/addresses/store/addresses.slice";
+
+import {
   configureStore,
   type Reducer,
   type UnknownAction,
 } from "@reduxjs/toolkit";
+import { settingsReducer } from "@/features/profile/settings/store/settings.slice";
+import { SettingsStateType } from "@/features/profile/settings/types/settings.types";
 
 export type RootStateType = {
   auth: AuthStateType;
   cart: CartStateType;
   wishlist: WishlistStateType;
+  addresses: AddressesStateType;
+  settings: SettingsStateType;
 };
 
 export type PreloadedStateType = Partial<RootStateType>;
@@ -41,6 +50,16 @@ export function createStore(preloadedState?: PreloadedStateType) {
         WishlistStateType,
         UnknownAction,
         WishlistStateType | undefined
+      >,
+      addresses: addressesReducer as Reducer<
+        AddressesStateType,
+        UnknownAction,
+        AddressesStateType | undefined
+      >,
+      settings: settingsReducer as Reducer<
+        SettingsStateType,
+        UnknownAction,
+        SettingsStateType | undefined
       >,
     },
     preloadedState,
