@@ -63,3 +63,8 @@ samir.en@example.com
 A123456&a
 
 https://freshcart-puce-theta.vercel.app/cart
+
+
+engmohamedsamir97@gmail.com
+A123456&a
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNDFkN2U4ZmMzM2Q4MDAxMjI2MjEzYSIsIm5hbWUiOiJNb2hhbWVkIFNhbWlyIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3ODI4MzU4OTgsImV4cCI6MTc5MDYxMTg5OH0.Nap8-hErhTqNYkbC9OKJqfol5DFIfPRQuka7f5OYgeU

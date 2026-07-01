@@ -8,9 +8,11 @@ import {
   Heart,
   LogOut,
   Mail,
+  MapPin,
   Menu,
   Phone,
   Search,
+  Settings,
   ShoppingCart,
   Truck,
   User,
@@ -25,9 +27,13 @@ import { useState } from "react";
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMainNavAccountDropdown, setIsMainNavAccountDropdown] = useState(false);
   const { handleLogout } = useLogout();
   const { isAuthenticated, userInfo } = useAppSelector((appState) => appState.auth);
   const { numOfCartItems } = useAppSelector((appState) => appState.cart);
+  const { count } = useAppSelector((appState) => appState.wishlist);
+
+  const numOfWishlistItems = count || 0;
 
   return (
     <header className="bg-white">
@@ -73,20 +79,20 @@ export default function NavBar() {
                     {/* Logged In State */}
                     <div className="flex items-center gap-4">
                       <Link
-  href="/profile"
-  className="group flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-gray-50/60 hover:bg-emerald-50/40 text-sm font-exo transition-all duration-300 border border-gray-100/70 hover:border-emerald-100/60"
->
-  <div className="relative flex items-center justify-center w-5.5 h-5.5 rounded-lg bg-white group-hover:bg-emerald-600 text-gray-500 group-hover:text-white transition-all duration-300 shadow-xs border border-gray-100 group-hover:border-emerald-600">
-    <User className="w-3 h-3 fill-current opacity-90 group-hover:scale-110 transition-transform" />
-  </div>
+                        href="/profile"
+                        className="group flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-gray-50/60 hover:bg-emerald-50/40 text-sm font-exo transition-all duration-300 border border-gray-100/70 hover:border-emerald-100/60"
+                      >
+                        <div className="relative flex items-center justify-center w-5.5 h-5.5 rounded-lg bg-white group-hover:bg-emerald-600 text-gray-500 group-hover:text-white transition-all duration-300 shadow-xs border border-gray-100 group-hover:border-emerald-600">
+                          <User className="w-3 h-3 fill-current opacity-90 group-hover:scale-110 transition-transform" />
+                        </div>
 
-  <div className="flex items-center gap-1 font-semibold">
-    <span className="text-gray-400 font-medium">Hi,</span>
-    <span className="text-gray-800 group-hover:text-emerald-700 max-w-27.5 truncate relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-emerald-600 group-hover:after:w-full after:transition-all after:duration-300 pb-0.5">
-      {userInfo?.name ? userInfo.name.split(" ")[0] : "Guest"}
-    </span>
-  </div>
-</Link>
+                        <div className="flex items-center gap-1 font-semibold">
+                          <span className="text-gray-400 font-medium">Hi,</span>
+                          <span className="text-gray-800 group-hover:text-emerald-700 max-w-27.5 truncate relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-emerald-600 group-hover:after:w-full after:transition-all after:duration-300 pb-0.5">
+                            {userInfo?.name ? userInfo.name.split(" ")[0] : "Guest"}
+                          </span>
+                        </div>
+                      </Link>
 
                       <button
                         onClick={handleLogout}
@@ -247,6 +253,11 @@ export default function NavBar() {
                 className="relative p-2 rounded-full hover:bg-emerald-50 text-gray-500 hover:text-emerald-600 transition-all"
               >
                 <Heart className="w-5 h-5" />
+                {numOfWishlistItems > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[11px] font-bold rounded-full w-4 h-4 flex items-center justify-center border border-white animate-fade-in">
+                    {numOfWishlistItems}
+                  </span>
+                )}
               </Link>
 
               <Link
@@ -259,13 +270,121 @@ export default function NavBar() {
                 </span>
               </Link>
 
+              {/* Account Dropdown - Desktop Only for Authenticated Users */}
+              {isAuthenticated && (
+                <div className="relative hidden lg:block">
+                  <button
+                    onClick={() => setIsMainNavAccountDropdown(!isMainNavAccountDropdown)}
+                    className="p-2 rounded-full hover:bg-emerald-50 text-gray-500 hover:text-emerald-600 transition-all cursor-pointer"
+                  >
+                    <User className="w-5 h-5" />
+                  </button>
+
+                  {/* Account Dropdown Menu */}
+                  {isMainNavAccountDropdown && (
+                    <>
+                      <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-50 z-50 overflow-hidden">
+                        {/* User Header Section */}
+                        <div className="px-4 py-4 border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white flex items-center gap-3">
+                          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                            <User className="w-5 h-5 text-emerald-600" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-gray-900 truncate">{userInfo?.name || "User"}</p>
+                            <p className="text-xs text-gray-500 truncate">{userInfo?.email || ""}</p>
+                          </div>
+                        </div>
+
+                        {/* Navigation Items */}
+                        <nav className="py-2">
+                          {/* My Profile */}
+                          <Link
+                            href="/profile"
+                            onClick={() => setIsMainNavAccountDropdown(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors text-sm font-medium"
+                          >
+                            <User className="w-4 h-4 text-gray-400" />
+                            <span>My Profile</span>
+                          </Link>
+
+                          {/* My Orders */}
+                          <Link
+                            href="/allorders"
+                            onClick={() => setIsMainNavAccountDropdown(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors text-sm font-medium"
+                          >
+                            <ShoppingCart className="w-4 h-4 text-gray-400" />
+                            <span>My Orders</span>
+                          </Link>
+
+                          {/* My Wishlist */}
+                          <Link
+                            href="/wishlist"
+                            onClick={() => setIsMainNavAccountDropdown(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors text-sm font-medium"
+                          >
+                            <Heart className="w-4 h-4 text-gray-400" />
+                            <span>My Wishlist</span>
+                          </Link>
+
+                          {/* Divider */}
+                          <div className="my-1 border-t border-gray-100" />
+
+                          {/* Addresses */}
+                          <Link
+                            href="/profile?tab=addresses"
+                            onClick={() => setIsMainNavAccountDropdown(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors text-sm font-medium"
+                          >
+                            <MapPin className="w-4 h-4 text-gray-400" />
+                            <span>Addresses</span>
+                          </Link>
+
+                          {/* Settings */}
+                          <Link
+                            href="/profile?tab=settings"
+                            onClick={() => setIsMainNavAccountDropdown(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors text-sm font-medium"
+                          >
+                            <Settings className="w-4 h-4 text-gray-400" />
+                            <span>Settings</span>
+                          </Link>
+
+                          {/* Divider */}
+                          <div className="my-1 border-t border-gray-100" />
+
+                          {/* Sign Out */}
+                          <button
+                            onClick={(event) => {
+                              setIsMainNavAccountDropdown(false);
+                              handleLogout(event);
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-red-600 hover:text-white hover:bg-red-500 transition-colors text-sm font-medium text-left"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Sign Out</span>
+                          </button>
+                        </nav>
+                      </div>
+
+                      {/* Backdrop - Close menu when clicking outside */}
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setIsMainNavAccountDropdown(false)}
+                      />
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Mobile Trigger Toggle */}
               {isAuthenticated ? (
-                <Link
-                  href="/profile"
-                  className="p-2 rounded-full hover:bg-emerald-50 text-gray-500 hover:text-emerald-600 transition-all"
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="p-2 rounded-full hover:bg-emerald-50 text-gray-500 hover:text-emerald-600 transition-all lg:hidden cursor-pointer"
                 >
                   <User className="w-5 h-5" />
-                </Link>
+                </button>
               ) : (
                 <Link
                   href="/login"
@@ -279,7 +398,7 @@ export default function NavBar() {
               {/* Mobile view menu button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center transition-all active:scale-95"
+                className="lg:hidden w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -314,7 +433,7 @@ export default function NavBar() {
                 </div>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-1 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+                  className="p-1 rounded-full hover:bg-gray-100 text-gray-500 transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -327,7 +446,7 @@ export default function NavBar() {
                   placeholder="Search products..."
                   className="w-full px-4 py-2 pr-10 rounded-lg border border-gray-100 bg-gray-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all text-sm"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-600">
+                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-600 cursor-pointer">
                   <Search className="w-4 h-4" />
                 </button>
               </div>
@@ -365,16 +484,22 @@ export default function NavBar() {
 
                 <hr className="border-gray-100 my-3" />
 
-                {/* Added Missing Wishlist and Cart items for Mobile layout */}
                 <Link
                   href="/wishlist"
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 py-2.5 px-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50/50 rounded-lg font-semibold transition-all"
+                  className="flex items-center justify-between py-2.5 px-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50/50 rounded-lg font-semibold transition-all"
                 >
-                  <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500">
-                    <Heart className="w-4 h-4 fill-red-500/10" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500">
+                      <Heart className="w-4 h-4 fill-red-500/10" />
+                    </div>
+                    <span>Wishlist</span>
                   </div>
-                  <span>Wishlist</span>
+                  {numOfWishlistItems > 0 && (
+                    <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {numOfWishlistItems}
+                    </span>
+                  )}
                 </Link>
 
                 <Link
@@ -389,15 +514,13 @@ export default function NavBar() {
                     <span>Cart</span>
                   </div>
                   <span className="bg-emerald-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    2
+                    {numOfCartItems}
                   </span>
                 </Link>
               </nav>
             </div>
 
-            {/* Bottom Section: Support and Auth buttons */}
             <div className="flex flex-col gap-4 mt-auto pt-4 border-t border-gray-100">
-              {/* Added Contact Support Section */}
               <Link
                 href="/contact"
                 onClick={() => setIsMenuOpen(false)}
